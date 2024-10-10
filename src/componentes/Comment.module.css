@@ -70,7 +70,7 @@
 }
 
 .commentBox footer button:hover {
-     color: var(--green-300);
+     color: var(--gray-300);
 }
 
 .commentBox footer button svg {

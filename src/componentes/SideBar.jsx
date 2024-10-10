@@ -15,7 +15,7 @@ export function SideBar() {
                 src="https://media.licdn.com/dms/image/v2/D4D03AQEEt2hFQPjQ9w/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1726700433074?e=1732147200&v=beta&t=IJp9NZnBpvAKtoeVMVTFZii2MtoDS74FZkWJt5OSgpA" />
 
                     <strong>Nayra Kethillyn</strong>
-                    <span>Web developer</span>
+                    <span>Confeiteira profissional</span>
 
                     <footer>
                          <a href="#">

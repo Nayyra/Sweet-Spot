@@ -1,54 +1,111 @@
 import { Comment } from './comment'
 import { Avatar } from './Avatar'
 import styles from './Post.module.css'
+import { useState } from 'react';
 
 
+export function Post({ author, publishedAt, content }) {
 
-export function Post() {
+     const [comentarios, setComments] = useState([
+          'Post muito bacana!'
+     ])
+
+     const [newComentText, setnNewComentText] = useState('')
+
+     const publishFormatted = new Intl.DateTimeFormat('pt-br', {
+          day: '2-digit',
+          month: 'long',
+          hour: '2-digit',
+          minute: '2-digit'
+     }).format(publishedAt);
+
+     const isNewCOmment = newComentText.length === 0;
+
+     function handelCreateComent() {
+          event.preventDefault();//evita o comportamento padrão do onClick no html
+          setComments([...comentarios, newComentText]);
+          setnNewComentText('');
+
+
+     }
+
+     function handelNewComentText(){
+          event.target.setCustomValidity('');
+          setnNewComentText(event.target.value);
+     }
+
+     function deleteComment(commentToDelete) {
+          const commentsSemOApagado = comentarios.filter(comment => {
+               return comment !== commentToDelete;
+          })
+
+          setComments(commentsSemOApagado);
+     }
+
+     function handleNewCommentInvalide(params) {
+          event.target.setCustomValidity('Campo obrigátorio');
+     }
+
      return (
           <article className={styles.post}>
                <header>
                     <div className={styles.author}>
                          <Avatar
-                              src="https://media.licdn.com/dms/image/v2/D4D03AQEEt2hFQPjQ9w/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1726700433074?e=1732147200&v=beta&t=IJp9NZnBpvAKtoeVMVTFZii2MtoDS74FZkWJt5OSgpA"
+                              src={author.avatarUrl}
                          />
                          <div className={styles.authorInfo}>
-                              <strong>Nayra Kethillyn</strong>
-                              <span>Web developer</span>
+                              <strong>{author.name}</strong>
+                              <span>{author.name}</span>
 
                          </div>
                     </div>
 
-                    <time dateTime="2024-09-11 20:30:56" title='2024-09-11 20:30:56 ' >Publicado a 1h</time>
+                    <time dateTime="2024-09-11 20:30:56" title={publishedAt.toISOString()}>
+                         {publishFormatted}
+                    </time>
                </header>
 
                <div className={styles.content}>
-                    <p>fala cambada</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum aut corrupti provident magnam! Provident sit, voluptate iusto iste optio, dolorem dolorum doloribus magni excepturi odio suscipit tempora nesciunt eveniet blanditiis!</p>
-                    <p>👉{' '}<a href="">nay.dev/doctorcare</a></p>
-                    <p>
-                         <a href="">#novoprojeto</a>{' '}
-                         <a href="">#dev</a>{' '}
-                         <a href="">#fullstack</a>{' '}
-                    </p>
+                    {content.map(line => {
+                         if (line.type == 'paragraph') {
+                              return <p key={line.content} >{line.content}</p>
+                         } else if (line.type == 'link') {
+                              return <p key={line.content} ><a href="">{line.content}</a></p>
+                         }
+                    })}
                </div>
 
-               <form className={styles.commmentForm}>
+               <form onSubmit={handelCreateComent} className={styles.commmentForm}>
                     <strong>deixe seu feedback</strong>
+
                     <textarea
-                    placeholder='Deixe se comentario'
+                         name='input'
+                         value={newComentText}
+                         placeholder='Deixe se comentario'
+                         onChange = {handelNewComentText}
+                         onInvalid={handleNewCommentInvalide}
+                         required
                     />
 
                     <footer>
-                    <button type='submit'>Publicar</button>
+                         <button type='submit' disabled={isNewCOmment}>Publicar</button>
                     </footer>
+
                </form>
 
                <div className={styles.commentList}>
-                    <Comment />
-                    <Comment />
-                    <Comment />
+                    {comentarios.map(line => {
+                         return (<Comment 
+                                   key={line} 
+                                   content={line} 
+                                   onDeleteComment={deleteComment}
+                                   />
+                              ) 
+                    })}
                </div>
           </article>
      )
 }
+
+//ESTADO = variaveis que eu quero quero componente manitore
+//useState 
